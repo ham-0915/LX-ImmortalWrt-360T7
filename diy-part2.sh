@@ -16,9 +16,9 @@ sed -i 's/hostname="ImmortalWrt"/hostname="360T7"/g' ./package/base-files/files/
 # ============================================================
 # Golang + lang rust（部分插件编译依赖）
 # ============================================================
-# log "替换 Golang → 27.x"
-# rm -rf feeds/packages/lang/golang
-# git clone --depth=1 -b 27.x https://github.com/sbwml/packages_lang_golang feeds/packages/lang/golang
+log "替换 Golang → 27.x"
+rm -rf feeds/packages/lang/golang
+git clone --depth=1 -b 27.x https://github.com/sbwml/packages_lang_golang feeds/packages/lang/golang
 
 # log "修复 lang-rust 404 问题"
 # rm -rf feeds/packages/lang/rust
