@@ -10,8 +10,11 @@ log() { echo ">>> [360T7] $*"; }
 # 基础设置（IP）+ 名称
 # ============================================================
 log "设置默认 IP → 192.168.124.1"
-sed -i 's/192.168.1.1/192.168.124.1/g' ./package/base-files/files/bin/config_generate
+sed -i 's/192.168.6.1/192.168.124.1/g' ./package/base-files/files/bin/config_generate
 sed -i 's/hostname="ImmortalWrt"/hostname="360T7"/g' ./package/base-files/files/bin/config_generate
+grep -rn "192\.168\.6\.1" package/base-files target/linux/mediatek 2>/dev/null   # 先看看它在哪里
+sed -i 's/192\.168\.6\.1/192.168.124.1/g' ./package/base-files/files/bin/config_generate
+grep -n "192\.168\.124\.1" ./package/base-files/files/bin/config_generate || { echo "IP 替换失败"; exit 1; }
 
 # ============================================================
 # Golang + lang rust（部分插件编译依赖）
@@ -50,11 +53,5 @@ git clone --depth=1 https://github.com/nikkinikki-org/OpenWrt-nikki package/nikk
 # --- lucky ---
 log "克隆 lucky"
 git clone --depth=1 https://github.com/gdy666/luci-app-lucky package/lucky
-
-# --- bandix ---
-log "克隆 bandix"
-git clone --depth=1 https://github.com/timsaya/luci-app-bandix package/bandix
-git clone --depth=1 https://github.com/timsaya/openwrt-bandix package/openwrt-bandix
-# ============================================================
 
 log "完成 ✓"
