@@ -9,12 +9,18 @@ log() { echo ">>> [360T7] $*"; }
 # ============================================================
 # 基础设置（IP）+ 名称
 # ============================================================
-log "设置默认 IP → 192.168.124.1"
-sed -i 's/192.168.6.1/192.168.124.1/g' ./package/base-files/files/bin/config_generate
-sed -i 's/hostname="ImmortalWrt"/hostname="360T7"/g' ./package/base-files/files/bin/config_generate
-grep -rn "192\.168\.6\.1" package/base-files target/linux/mediatek 2>/dev/null   # 先看看它在哪里
-sed -i 's/192\.168\.6\.1/192.168.124.1/g' ./package/base-files/files/bin/config_generate
-grep -n "192\.168\.124\.1" ./package/base-files/files/bin/config_generate || { echo "IP 替换失败"; exit 1; }
+CFG=./package/base-files/files/bin/config_generate
+
+log "设置默认 IP → 192.168.123.1"
+# 仅供日志查看,必须放在 sed 之前
+grep -rn "192\.168\.6\.1" package/base-files target/linux/mediatek 2>/dev/null || true
+sed -i 's/192\.168\.6\.1/192.168.123.1/g' "$CFG"
+grep -q "192\.168\.123\.1" "$CFG" || { echo "IP 替换失败"; exit 1; }
+
+log "设置主机名 → 360T7"
+grep -n "hostname" "$CFG" || true
+sed -i -E "s/(hostname=['\"])ImmortalWrt(['\"])/\1360T7\2/" "$CFG"
+grep -q "360T7" "$CFG" || { echo "主机名替换失败"; exit 1; }
 
 # ============================================================
 # Golang + lang rust（部分插件编译依赖）
